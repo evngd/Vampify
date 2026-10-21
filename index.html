@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Streamline</title>
+<style>
+:root{--bg:#000;--panel:#121212;--card:#181818;--hover:#2a2a2a;--text:#fff;--mute:#b3b3b3;--green:#1ed760;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font:14px/1.4 "Helvetica Neue",Helvetica,Arial,sans-serif}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.app{display:grid;grid-template-columns:250px 1fr;grid-template-rows:1fr 76px;gap:8px;height:100%;padding:8px}
+.side,.main{background:var(--panel);border-radius:10px;overflow:auto}
+.side{padding:16px 8px;display:flex;flex-direction:column;gap:4px}
+.logo{font-weight:800;font-size:20px;padding:0 12px 12px;letter-spacing:-.5px}
+.logo i{color:var(--green);font-style:normal}
+.nav{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:6px;color:var(--mute);width:100%;text-align:left;font-weight:600}
+.nav:hover,.nav.on{color:var(--text);background:var(--hover)}
+.sep{height:1px;background:#2a2a2a;margin:8px 12px}
+.pfp{width:32px;height:32px;border-radius:50%;flex:none;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff}
+.modsw{margin-top:auto;padding:12px;display:flex;gap:8px;align-items:center;color:var(--mute);font-size:13px}
+.modsw input{accent-color:var(--green)}
+.banner{height:260px;padding:24px;display:flex;align-items:flex-end;gap:20px}
+.banner .pfp{width:140px;height:140px;font-size:56px;box-shadow:0 4px 40px #0008}
+.banner h1{font-size:64px;margin:0;line-height:1;letter-spacing:-2px}
+.banner p{margin:8px 0 0;font-weight:500}
+.bar{display:flex;gap:16px;align-items:center;padding:20px 24px}
+.big{width:56px;height:56px;border-radius:50%;background:var(--green);color:#000;font-size:22px}
+.big:hover{transform:scale(1.05)}
+.pill{border:1px solid #727272;border-radius:20px;padding:6px 16px;font-weight:700}
+.pill:hover{border-color:#fff}
+h2{font-size:22px;margin:0 24px 8px}
+.row{display:grid;grid-template-columns:32px 1fr 36px 140px 40px;gap:8px;align-items:center;padding:8px 24px;margin:0 8px;border-radius:6px;cursor:pointer}
+.row:hover{background:var(--hover)}
+.row.cur .t{color:var(--green)}
+.row .n{color:var(--mute);text-align:center}
+.row .st{text-align:right;color:var(--mute);font-variant-numeric:tabular-nums}
+.more{color:var(--mute);font-size:18px}.more:hover{color:#fff}
+.empty{padding:24px;color:var(--mute)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:16px;padding:0 24px 24px}
+.card{background:var(--card);border-radius:8px;padding:16px;text-align:left}
+.card:hover{background:var(--hover)}
+.card .pfp{width:100%;height:auto;aspect-ratio:1;border-radius:50%;font-size:48px;margin-bottom:12px}
+.card b{display:block}.card span{color:var(--mute);font-size:13px}
+.player{grid-column:1/-1;background:var(--bg);display:grid;grid-template-columns:1fr 2fr 1fr;align-items:center;padding:0 12px;gap:12px}
+.np{display:flex;gap:12px;align-items:center;min-width:0}.np div{min-width:0}
+.np .pfp{border-radius:4px;width:52px;height:52px}
+.np small{color:var(--mute);display:block}
+.cov{width:40px;height:40px;border-radius:4px;flex:none;background-size:cover;background-position:center;display:grid;place-items:center;font-weight:700;color:#fff}
+.row .t{display:flex;align-items:center;gap:12px;min-width:0}
+.row .t span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pick{display:flex;align-items:center;gap:12px;margin-bottom:12px;cursor:pointer;color:var(--mute)}
+.pick:hover{color:#fff}
+.vf{display:inline-grid;place-items:center;width:16px;height:16px;font-size:11px;border-radius:50%;background:#3d91f4;color:#fff;font-style:normal;font-weight:800;margin-left:6px;vertical-align:middle;line-height:1;flex:none}
+.banner h1 .vf{width:34px;height:34px;font-size:20px;margin-left:12px}
+.bar{flex-wrap:wrap}
+label.pill{cursor:pointer}
+.ctl{display:flex;flex-direction:column;align-items:center;gap:6px}
+.pp{width:34px;height:34px;border-radius:50%;background:#fff;color:#000}
+.pr{display:flex;gap:8px;align-items:center;width:100%;color:var(--mute);font-size:12px}
+.track{flex:1;height:4px;background:#4d4d4d;border-radius:2px;overflow:hidden}
+.track div{height:100%;width:0;background:#fff}
+.track{cursor:pointer;height:6px}
+.sb{position:sticky;top:0;z-index:5;padding:12px 24px;background:#121212cc;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+#q{width:min(100%,380px);padding:10px 16px;border-radius:20px;border:0;background:#2a2a2a;color:#fff;font:inherit}
+#q:focus{outline:2px solid #fff}
+.ebv{height:90px;border-radius:6px;margin-bottom:12px}
+.dlg{max-height:90vh;overflow:auto}
+.dlg textarea{width:100%;padding:12px;border-radius:4px;border:0;background:#3e3e3e;color:#fff;font:inherit;margin-bottom:16px;resize:vertical}
+.ths{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.th{position:relative;width:56px;height:56px;border-radius:6px;flex:none}
+.th button{position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;background:#000;font-size:14px;line-height:1}
+.about{display:flex;gap:24px;padding:0 24px 40px;align-items:flex-start;flex-wrap:wrap}
+.sld{position:relative;width:min(100%,420px);height:260px;border-radius:10px;overflow:hidden;flex:none}
+.sl{position:absolute;inset:0}
+.sn{position:absolute;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;background:#000a;font-size:22px;line-height:1}
+.sn:hover{background:#000}
+.sn.p{left:10px}.sn.n{right:10px}
+.dots{position:absolute;bottom:10px;left:0;right:0;display:flex;gap:6px;justify-content:center}
+.dots i{width:7px;height:7px;border-radius:50%;background:#fff6}
+.dots i.on{background:#fff}
+.bio{flex:1;min-width:240px;max-width:60ch;margin:0;font-size:16px;line-height:1.6;color:var(--mute);white-space:pre-wrap}
+.hrt{color:var(--mute);font-size:18px;width:32px;flex:none}.hrt:hover{color:#fff}.hrt.on{color:var(--green)}
+.side{overflow:hidden}
+.libs{flex:1;overflow:auto;min-height:0;display:flex;flex-direction:column;gap:2px}
+.lh{padding:6px 12px;font-weight:700;color:var(--mute)}
+.lb{padding:6px 12px}
+.lb .lt{display:flex;flex-direction:column;min-width:0;text-align:left}
+.lb .lt b{color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lb small{color:var(--mute);font-weight:400}
+.ic{width:32px;height:32px;border-radius:4px;flex:none;display:grid;place-items:center;color:#fff;font-size:15px}
+.sq{position:relative;padding:4px}
+.sq svg{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--mute);pointer-events:none}
+#q{width:100%;padding:9px 14px 9px 38px}
+@media(max-width:760px){.side{overflow:auto}.libs{flex:none;overflow:visible;flex-direction:row}.lh,.lb small{display:none}.sq{min-width:160px}}
+.flash{animation:fl .7s}
+@keyframes fl{0%{color:var(--green);transform:scale(1.08)}100%{transform:none}}
+#cm{position:fixed;z-index:20;background:#282828;border-radius:6px;padding:4px;min-width:190px;box-shadow:0 8px 24px #000a;display:none}
+#cm button{display:block;width:100%;text-align:left;padding:10px 12px;border-radius:4px}
+#cm button:hover{background:#3e3e3e}
+#cm .bst{color:var(--green);font-weight:700}
+#ov{position:fixed;inset:0;background:#000a;display:none;place-items:center;z-index:30}
+.dlg{background:#282828;border-radius:10px;padding:24px;width:min(92vw,400px)}
+.dlg h3{margin:0 0 4px;font-size:20px}.dlg p{margin:0 0 16px;color:var(--mute)}
+.pre{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.dlg input[type=text]{width:100%;padding:12px;border-radius:4px;border:0;background:#3e3e3e;color:#fff;font:inherit;margin-bottom:16px}
+.dlg .acts{display:flex;justify-content:flex-end;gap:8px}
+.go{background:var(--green);color:#000;font-weight:700;border-radius:20px;padding:10px 24px}
+#toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:var(--green);color:#000;font-weight:700;padding:10px 18px;border-radius:20px;display:none;z-index:40}
+@media(max-width:760px){.app{grid-template-columns:1fr;grid-template-rows:auto 1fr 76px}.side{flex-direction:row;overflow:auto;padding:8px}.logo,.sep,.modsw .l{display:none}.modsw{margin:0 0 0 auto;padding:0 8px;white-space:nowrap}.nav{width:auto;white-space:nowrap}.banner{height:auto;flex-direction:column;align-items:flex-start}.banner h1{font-size:40px}.banner .pfp{width:96px;height:96px;font-size:40px}.row{grid-template-columns:24px 1fr 32px 96px 32px;padding:8px 12px}.player{grid-template-columns:1fr 1fr}.player>:last-child{display:none}}
+</style></head><body>
+<div class="app">
+<nav class="side" id="side"></nav>
+<section class="main"><div id="main"></div></section>
+<div class="player" id="player"></div>
+</div>
+<div id="cm"></div><div id="ov"></div><div id="toast"></div>
+<input type="file" id="pf" accept="image/*" hidden><input type="file" id="bf" accept="image/*" hidden><input type="file" id="ax" accept=".mp3,.wav,audio/mpeg,audio/wav,audio/x-wav" hidden>
+<script>
+const DUR=20;
+const A=[
+{id:"nova",name:"Nova Vale",v:true,bio:"Nova Vale writes late-night synth-pop about city lights and short summers. Her debut “Midnight Static” took over playlists in under a week, and she’s been playing small rooms ever since.",im:["g:210","g:290","g:340"],l:1284503,songs:[["Midnight Static",4821903],["Glass Hours",2210456],["Paper Moons",987221]]},
+{id:"kid",name:"Kid Orbit",bio:"Kid Orbit makes bedroom-produced space rock with far too many guitar pedals. Every track was recorded in a garage between shifts.",im:["g:20","g:150"],l:312884,songs:[["Rocket Fuel",1204331],["Lowkey Planet",455820],["Static Kiss",120993]]},
+{id:"mara",name:"Mara Lune",bio:"Mara Lune sings quiet folk songs about long drives and window seats. New songs show up whenever she finishes them.",im:["g:160","g:40","g:260"],l:98211,songs:[["Salt & Honey",312044],["Window Seat",88120]]},
+{id:"dex",name:"Dex Harlow",bio:"Dex Harlow is just getting started: two demos recorded on a phone, with more on the way.",l:4510,songs:[["First Demo",12044],["Basement Tape",3188]]},
+{id:"me",name:"Your Artist",l:0,songs:[]}
+];
+let uid=0;A.forEach(a=>a.songs=a.songs.map(s=>({id:"s"+uid++,t:s[0],s:s[1]})));
+const hue=n=>[...n].reduce((x,c)=>x+c.charCodeAt(0)*13,0)%360;
+const col=n=>`hsl(${hue(n)} 55% 38%)`;
+const fmt=n=>n.toLocaleString("en-US");
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=s=>document.querySelector(s);
+const art=id=>A.find(a=>a.id===id);
+const find=id=>{for(const a of A)for(const s of a.songs)if(s.id===id)return[a,s]};
+const pfp=a=>`<span class="pfp" style="background:${a.p?`center/cover url(${a.p})`:col(a.name)}">${a.p?"":esc(a.name[0])}</span>`;
+const vb=a=>a.v?`<i class="vf" title="Verified artist">✓</i>`:"";
+let view={v:"home"},mod=false,cur=null,prog=0,playing=false,counted=false,heard=new Set(),amt=1000;
+
+let tmp=null,tmpA=null,axId=null,dur=DUR,q="";
+let epP=null,epB=null,epI=[],sl=0;
+function side(){
+ const me=art("me"),fl=[...following].map(art);
+ const ic=(c,g)=>`<span class="ic" style="background:${g}">${c}</span>`;
+ const li=(on,act,id,i,t,s)=>`<button class="nav lb ${on?"on":""}" data-act="${act}"${id?` data-id="${id}"`:""}>${i}<span class="lt"><b>${t}</b><small>${s}</small></span></button>`;
+ const cnt=n=>`${n} ${n===1?"song":"songs"}`;
+ $("#side").innerHTML=li(view.id==="me","artist","me",pfp(me),esc(me.name)+vb(me),"Your artist page")
+ +`<div class="sep"></div><button class="nav ${view.v==="home"?"on":""}" data-act="home"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3 2 12h3v8h5v-5h4v5h5v-8h3z"/></svg><b>Home</b></button>`
+ +`<div class="sq"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="q" type="search" value="${esc(q)}" placeholder="Search songs and artists" autocomplete="off" aria-label="Search songs and artists"></div>`
+ +`<div class="sep"></div><div class="lh">Your Library</div><div class="libs">`
+ +li(view.v==="liked","liked","",ic("♥","linear-gradient(135deg,#450af5,#c4efd9)"),"Liked Songs",cnt(liked.size))
+ +P.map(p=>li(view.id===p.id,"pl",p.id,ic("♪",`linear-gradient(135deg,hsl(${hue(p.name)} 55% 40%),#282828)`),esc(p.name),"Playlist, "+cnt(p.songs.length))).join("")
+ +`<button class="nav lb" data-act="newpl"><span class="ic" style="background:#2a2a2a">+</span><span class="lt"><b>New playlist</b></span></button>`
+ +fl.map(a=>li(view.id===a.id,"artist",a.id,pfp(a),esc(a.name)+vb(a),"Artist")).join("")
+ +(fl.length?"":`<div class="empty" style="padding:12px;font-size:13px">Artists you follow show up here.</div>`)
+ +`</div><label class="modsw"><input type="checkbox" id="mod" ${mod?"checked":""}><span><span class="l">Moderator mode</span><span class="l" style="display:block;font-size:11px">Right-click a song to boost</span></span></label>`;
+}
+let liked=new Set(),following=new Set(),P=[],pendSong=null,delId=null;
+const F={nova:52340,kid:8120,mara:2210,dex:140};A.forEach(a=>a.f=F[a.id]||0);
+const hb=s=>`<button class="hrt ${liked.has(s.id)?"on":""}" data-act="like" data-id="${s.id}" aria-label="Like song">${liked.has(s.id)?"♥":"♡"}</button>`;
+function hearts(){document.querySelectorAll(".hrt").forEach(b=>{const o=liked.has(b.dataset.id);b.classList.toggle("on",o);b.textContent=o?"♥":"♡"})}
+const sr=(a,s,i)=>`<div class="row ${cur===s.id?"cur":""}" data-song="${s.id}" data-act="play" data-id="${s.id}"><span class="n">${i+1}</span><span class="t">${cov(s,a)}<span>${esc(s.t)}<small style="display:block;color:var(--mute)">${esc(a.name)}</small></span></span>${hb(s)}<span class="st" data-sid="${s.id}">${fmt(s.s)}</span><button class="more" data-act="more" data-id="${s.id}" aria-label="More">⋯</button></div>`;
+const libNav=()=>`<button class="nav ${view.v==="liked"?"on":""}" data-act="liked">♥ Liked Songs</button>${P.map(p=>`<button class="nav ${view.id===p.id?"on":""}" data-act="pl" data-id="${p.id}">♪ ${esc(p.name)}</button>`).join("")}<button class="nav" data-act="newpl">+ New playlist</button><div class="sep"></div>`;
+function head(t,n,x){return `<div style="padding:24px"><p style="margin:0;color:var(--mute)">Playlist</p><h1 style="margin:4px 0;font-size:48px;letter-spacing:-1px">${t}</h1><p style="margin:0;color:var(--mute)">${n} ${n===1?"song":"songs"}</p>${x||""}</div>`}
+function libView(){const l=[...liked].map(find);return head("Liked Songs",l.length)+(l.length?l.map(([a,s],i)=>sr(a,s,i)).join(""):`<div class="empty">Songs you like show up here. Tap the heart next to any song to add it.</div>`)}
+function plView(){const p=P.find(x=>x.id===view.id);if(!p)return "";const l=p.songs.map(find).filter(Boolean);return head(esc(p.name),l.length,`<div style="margin-top:16px"><button class="pill" data-act="delpl" data-id="${p.id}">Delete playlist</button></div>`)+(l.length?l.map(([a,s],i)=>sr(a,s,i)).join(""):`<div class="empty">This playlist is empty. Open ⋯ on any song and choose Add to playlist.</div>`)}
+function slBg(x){return x.startsWith("g:")?`linear-gradient(135deg,hsl(${+x.slice(2)} 60% 35%),hsl(${(+x.slice(2)+50)%360} 60% 18%))`:`center/cover url(${x})`}
+function thumbs(){return epI.map((x,j)=>`<span class="th" style="background:${slBg(x)}"><button data-act="rmimg" data-j="${j}" aria-label="Remove image">×</button></span>`).join("")}
+function about(a){
+ const me=a.id==="me",im=a.im||[],n=im.length;
+ if(!a.bio&&!n&&!me)return "";
+ sl=n?((sl%n)+n)%n:0;
+ const tx=a.bio?esc(a.bio):(me&&!n?"Add a bio and photos from the ⋯ menu so listeners can get to know you.":"");
+ return `<h2 style="margin-top:32px">About</h2><div class="about">${n?`<div class="sld"><div class="sl" id="slv" style="background:${slBg(im[sl])}"></div>${n>1?`<button class="sn p" data-act="slide" data-d="-1" aria-label="Previous image">‹</button><button class="sn n" data-act="slide" data-d="1" aria-label="Next image">›</button><div class="dots" id="sdt">${im.map((_,j)=>`<i class="${j===sl?"on":""}"></i>`).join("")}</div>`:""}</div>`:""}${tx?`<p class="bio">${tx}</p>`:""}</div>`
+}
+function results(){
+ const k=q.trim().toLowerCase();
+ const as=A.filter(a=>a.name.toLowerCase().includes(k)).sort((x,y)=>y.l-x.l);
+ const ss=[];A.forEach(a=>a.songs.forEach(s=>{if(s.t.toLowerCase().includes(k))ss.push([a,s])}));
+ ss.sort((x,y)=>y[1].s-x[1].s);
+ if(!as.length&&!ss.length)return `<div class="empty">No results for “${esc(q.trim())}”. Check the spelling or try a different name.</div>`;
+ return (as.length?`<h2>Artists</h2><div class="grid">${as.map(a=>`<button class="card" data-act="artist" data-id="${a.id}">${pfp(a)}<b>${esc(a.name)}${vb(a)}</b><span><span data-aid="${a.id}">${fmt(a.l)}</span> monthly listeners</span></button>`).join("")}</div>`:"")+(ss.length?`<h2>Songs</h2>${ss.map(([a,s],i)=>`<div class="row ${cur===s.id?"cur":""}" data-song="${s.id}" data-act="play" data-id="${s.id}"><span class="n">${i+1}</span><span class="t">${cov(s,a)}<span>${esc(s.t)}<small style="display:block;color:var(--mute)">${esc(a.name)}</small></span></span>${hb(s)}<span class="st" data-sid="${s.id}">${fmt(s.s)}</span><button class="more" data-act="more" data-id="${s.id}" aria-label="More">⋯</button></div>`).join("")}`:"");
+}
+const au=new Audio();au.onended=()=>{playing=false;prog=0;pl()};
+const tf=t=>{t=Math.floor(t||0);return Math.floor(t/60)+":"+String(t%60).padStart(2,"0")};
+const okAudio=f=>/\.(mp3|wav)$/i.test(f.name)&&(f.type===""||f.type.startsWith("audio/"));
+function fit(f,w,h,cb){const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const c=document.createElement("canvas");c.width=w;c.height=h;const k=Math.max(w/im.width,h/im.height),sw=w/k,sh=h/k;c.getContext("2d").drawImage(im,(im.width-sw)/2,(im.height-sh)/2,sw,sh,0,0,w,h);const u=c.toDataURL("image/jpeg",.85);c.toBlob(async b=>cb((b&&await up(b))||u),"image/jpeg",.85)};im.src=r.result};r.readAsDataURL(f)}
+function cov(s,a,z){const st=s.c?`background-image:url(${s.c})`:`background:${col(s.t)}`;return `<span class="cov" style="${st}${z?`;width:${z}px;height:${z}px`:""}">${s.c?"":esc(s.t[0])}</span>`}
+function loadCover(f){const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const c=document.createElement("canvas");c.width=c.height=400;const m=Math.min(im.width,im.height);c.getContext("2d").drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,400,400);tmp=c.toDataURL("image/jpeg",.85);const p=$("#cp");if(p){p.style.backgroundImage=`url(${tmp})`;p.textContent=""}const d0=tmp;c.toBlob(async b=>{const r=b&&await up(b);if(r&&tmp===d0)tmp=r},"image/jpeg",.85);};im.src=r.result};r.readAsDataURL(f)}
+function sideOld(){
+ $("#side").innerHTML=`<div class="logo">Stream<i>line</i></div>
+ <button class="nav ${view.v==="home"?"on":""}" data-act="home">Home</button>
+ <button class="nav ${view.id==="me"?"on":""}" data-act="artist" data-id="me">Your artist page</button>
+ <div class="sep"></div>
+ ${libNav()}${A.filter(a=>a.id!=="me").map(a=>`<button class="nav ${view.id===a.id?"on":""}" data-act="artist" data-id="${a.id}">${pfp(a)}${esc(a.name)}${vb(a)}</button>`).join("")}
+ <label class="modsw"><input type="checkbox" id="mod" ${mod?"checked":""}><span><span class="l">Moderator mode</span><span class="l" style="display:block;font-size:11px">Right-click a song to boost</span></span></label>`;
+}
+function main(){
+ const m=$("#main");
+ if(view.v==="search"){m.innerHTML=results()}else if(view.v==="liked"){m.innerHTML=libView()}else if(view.v==="pl"){m.innerHTML=plView()}else if(view.v==="home"){
+  m.innerHTML=`<div style="padding:24px 24px 8px"><h1 style="margin:0;font-size:32px">Good evening</h1></div><h2 style="margin-top:16px">Artists</h2><div class="grid">${[...A].sort((a,b)=>b.l-a.l).map(a=>`<button class="card" data-act="artist" data-id="${a.id}">${pfp(a)}<b>${esc(a.name)}${vb(a)}</b><span><span data-aid="${a.id}">${fmt(a.l)}</span> monthly listeners</span></button>`).join("")}</div>`;
+ }else{
+  const a=art(view.id),me=a.id==="me";
+  m.innerHTML=`<div class="banner" style="background:${a.b?`linear-gradient(#0000 30%,#121212f0),center/cover url(${a.b})`:`linear-gradient(${hue(a.name)}deg,${col(a.name)},#121212)`}">${pfp(a)}<div><p>${a.v?"Verified artist":"Artist"}</p><h1>${esc(a.name)}${vb(a)}</h1><p><span data-aid="${a.id}">${fmt(a.l)}</span> monthly listeners</p><p><span data-fid="${a.id}">${fmt(a.f)}</span> followers</p></div></div>
+  <div class="bar">${a.songs.length?`<button class="big" data-act="play" data-id="${a.songs[0].id}">▶</button>`:""}${me&&!window.streamlineSignedIn?`<button class="pill" onclick="document.getElementById('owner-open').click()">Sign in to create your artist profile</button>`:""}${me&&window.streamlineSignedIn?`<button class="pill" data-act="edit" aria-label="Edit your page" title="Edit your page" style="font-size:20px;line-height:1;padding:6px 14px">⋯</button>`:""}${me?"":`<button class="pill" data-act="follow" data-id="${a.id}">${following.has(a.id)?"Following":"Follow"}</button>`}${mod?`<button class="pill" data-act="verify" data-id="${a.id}">${a.v?"Remove verification":"Verify artist"}</button><button class="pill" data-act="bfol" data-id="${a.id}">Boost followers</button>`:""}</div>
+  <h2>Popular</h2>${a.songs.length?[...a.songs].sort((x,y)=>y.s-x.s).map((s,i)=>`<div class="row ${cur===s.id?"cur":""}" data-song="${s.id}" data-act="play" data-id="${s.id}"><span class="n">${i+1}</span><span class="t">${cov(s,a)}<span>${esc(s.t)}</span></span>${hb(s)}<span class="st" data-sid="${s.id}">${fmt(s.s)}</span><button class="more" data-act="more" data-id="${s.id}" aria-label="More">⋯</button></div>`).join(""):`<div class="empty">No songs yet. Open the ⋯ menu above to upload your first track and start collecting streams.</div>`}${about(a)}`;
+ }
+}
+function pl(){
+ const f=cur&&find(cur);
+ $("#player").innerHTML=f?`<div class="np">${cov(f[1],f[0],52)}<div><b>${esc(f[1].t)}</b><small>${esc(f[0].name)}</small></div>${hb(f[1])}</div>
+ <div class="ctl"><button class="pp" data-act="pp">${playing?"❚❚":"▶"}</button><div class="pr"><span id="tm">0:00</span><div class="track" data-act="seek"><div id="bar"></div></div><span id="td">${tf(dur)}</span></div></div><div></div>`:`<div class="np"><span style="color:var(--mute)">Pick a song to play</span></div><div></div><div></div>`;
+ tick(true);
+}
+function tick(skip){
+ const b=$("#bar");if(b){b.style.width=(dur?Math.min(100,prog/dur*100):0)+"%";$("#tm").textContent=tf(prog);const d=$("#td");if(d)d.textContent=tf(dur)}
+}
+function setT(el,v){if(el.textContent!==v){el.textContent=v;el.classList.remove("flash");void el.offsetWidth;el.classList.add("flash")}}
+function refresh(){
+ document.querySelectorAll("[data-sid]").forEach(e=>setT(e,fmt(find(e.dataset.sid)[1].s)));
+ document.querySelectorAll("[data-aid]").forEach(e=>setT(e,fmt(art(e.dataset.aid).l)));document.querySelectorAll("[data-fid]").forEach(e=>setT(e,fmt(art(e.dataset.fid).f)));
+}
+function play(id){cur=id;prog=0;playing=true;counted=false;const s=find(id)[1];dur=s.u?0:DUR;if(s.u){au.src=s.u;au.play().catch(()=>{playing=false;pl()})}else au.pause();main();pl()}
+setInterval(()=>{
+ if(!playing||!cur)return;
+ const cs=find(cur)[1];if(cs.u){prog=au.currentTime;dur=au.duration||0}else{prog+=.25;dur=DUR}
+ if(!counted&&prog>=3){counted=true;const[a,s]=find(cur);s.s++;if(!heard.has(a.id)){heard.add(a.id);a.l++}refresh()}
+ if(!cs.u&&prog>=DUR){playing=false;prog=0;pl()}else tick();
+},250);
+function toast(t){const e=$("#toast");e.textContent=t;e.style.display="block";clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.display="none",2200)}
+function menu(x,y,id){
+ const[a,s]=find(id);
+ const c=$("#cm");
+ c.innerHTML=`<button data-act="play" data-id="${id}">Play</button><button data-act="artist" data-id="${a.id}">Go to artist</button><button data-act="like" data-id="${id}">${liked.has(id)?"Remove from Liked Songs":"Like song"}</button><button data-act="addpl" data-id="${id}">Add to playlist</button>${view.v==="pl"?`<button data-act="rmpl" data-id="${id}">Remove from this playlist</button>`:""}${a.id==="me"?`<button data-act="addaudio" data-id="${id}">${s.u?"Replace audio":"Add audio file"}</button>`:""}${mod?`<button class="bst" data-act="boost" data-id="${id}">Boost streams…</button><button data-act="verify" data-id="${a.id}">${a.v?"Remove verification":"Verify artist"}</button>`:""}`;
+ c.style.display="block";
+ c.style.left=Math.min(x,innerWidth-c.offsetWidth-8)+"px";
+ c.style.top=Math.min(y,innerHeight-c.offsetHeight-8)+"px";
+}
+function dlg(h){const o=$("#ov");o.innerHTML=`<div class="dlg">${h}</div>`;o.style.display="grid"}
+function close(){$("#ov").style.display="none";$("#cm").style.display="none"}
+document.addEventListener("contextmenu",e=>{const r=e.target.closest("[data-song]");if(r){e.preventDefault();menu(e.clientX,e.clientY,r.dataset.song)}});
+document.addEventListener("change",e=>{const i=e.target.id,f=e.target.files&&e.target.files[0];if(i==="mod"){if(!window.streamlineOwner){mod=false;e.target.checked=false;toast("Owner login required");return}mod=e.target.checked;main()}if(i==="cf"&&f)loadCover(f);if(i==="pf"&&f)fit(f,400,400,d=>{art("me").p=d;side();main();pl()});if(i==="ei"&&e.target.files.length){const room=5-epI.length;if(e.target.files.length>room)toast("Up to 5 slide images");[...e.target.files].slice(0,room).forEach(x=>fit(x,900,540,d=>{epI.push(d);const h=$("#eth");if(h)h.innerHTML=thumbs()}));e.target.value=""}if((i==="ep"||i==="eb")&&f)fit(f,i==="ep"?400:1200,i==="ep"?400:300,d=>{if(i==="ep"){epP=d;const v=$("#epv");if(v){v.style.background=`center/cover url(${d})`;v.textContent=""}}else{epB=d;const v=$("#ebv");if(v)v.style.background=`center/cover url(${d})`}});if(i==="bf"&&f)fit(f,1200,300,d=>{art("me").b=d;main()});if((i==="af"||i==="ax")&&f){if(!okAudio(f)){e.target.value="";toast("Only MP3 or WAV files are supported");return}const u=URL.createObjectURL(f),ax=axId;up(f).then(r=>{if(!r){toast("Audio hosting is not connected on the free plan yet, so this file only plays until you close the page");return}if(i==="af"){if(tmpA===u)tmpA=r}else{const s=find(ax);if(s&&s[1].u===u)s[1].u=r}});if(i==="af"){tmpA=u;$("#an").textContent=f.name}else{const s=find(axId)[1];s.u=u;e.target.value="";main();toast("Audio added to “"+s.t+"”")}}});
+document.addEventListener("click",e=>{
+ const t=e.target.closest("[data-act]");
+ if(!t){if(e.target.id==="ov")close();$("#cm").style.display="none";return}
+ const act=t.dataset.act,id=t.dataset.id;
+ if(act!=="more")$("#cm").style.display="none";
+ if(act==="home"){$("#q").value="";q="";view={v:"home"};side();main()}
+ else if(act==="artist"){sl=0;$("#q").value="";q="";close();view={v:"artist",id};side();main()}
+ else if(act==="play"){close();play(id)}
+ else if(act==="more"){e.stopPropagation();const r=t.getBoundingClientRect();menu(r.left-150,r.bottom,id)}
+ else if(act==="pp"){if(!cur)return;playing=!playing;if(find(cur)[1].u){playing?au.play():au.pause()}pl()}
+ else if(act==="seek"){const s=cur&&find(cur)[1];if(!s)return;const r=t.getBoundingClientRect(),p=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width));if(s.u){if(au.duration)au.currentTime=p*au.duration}else prog=p*DUR;tick()}
+ else if(act==="boost"){
+  const[a,s]=find(id);amt=1000;
+  dlg(`<h3>Boost streams</h3><p>${esc(s.t)} by ${esc(a.name)}</p><div class="pre">${[1000,10000,100000,1000000].map(n=>`<button class="pill" data-act="amt" data-n="${n}">+${fmt(n)}</button>`).join("")}</div><input type="text" id="amt" value="1,000" inputmode="numeric"><div class="acts"><button class="pill" data-act="close">Cancel</button><button class="go" data-act="doboost" data-id="${id}">Boost</button></div>`);
+ }
+ else if(act==="amt"){$("#amt").value=fmt(+t.dataset.n)}
+ else if(act==="doboost"){
+  const n=parseInt($("#amt").value.replace(/\D/g,""),10);
+  if(!n){$("#amt").focus();return}
+  const[a,s]=find(id);s.s+=n;a.l+=Math.round(n*.3);
+  close();refresh();toast("Boosted “"+s.t+"” by "+fmt(n)+" streams");
+ }
+ else if(act==="upload"){if(!window.streamlineSignedIn){toast("Sign in to upload music");window.streamlineOpenAccount?.();return}tmp=null;tmpA=null;dlg(`<h3>Upload song</h3><p>Name your track, add a cover, and attach an MP3 or WAV file.</p><label class="pick"><span class="cov" id="cp" style="width:72px;height:72px;background-color:#3e3e3e;font-size:12px">Cover</span><input type="file" id="cf" accept="image/*" hidden><span>Choose cover image</span></label><label class="pick"><input type="file" id="af" accept=".mp3,.wav,audio/mpeg,audio/wav,audio/x-wav" hidden><span id="an">Choose audio file (MP3 or WAV)</span></label><input type="text" id="ut" placeholder="Song title"><div class="acts"><button class="pill" data-act="close">Cancel</button><button class="go" data-act="doup">Upload</button></div>`);$("#ut").focus()}
+ else if(act==="doup"){if(!window.streamlineSignedIn){toast("Sign in to upload music");window.streamlineOpenAccount?.();return}const v=$("#ut").value.trim();if(!v){$("#ut").focus();return}art("me").songs.push({id:(window.streamlineUserId||"local")+"_s"+uid++,t:v,s:0,c:tmp,u:tmpA});close();main();toast("“"+v+"” uploaded");window.streamlinePersistArtist?.()}
+ else if(act==="verify"){if(!mod)return;const a=art(id);a.v=!a.v;side();main();pl();toast(a.name+(a.v?" is now verified":" is no longer verified"))}
+ else if(act==="edit"){if(!window.streamlineSignedIn){toast("Sign in to edit your artist profile");window.streamlineOpenAccount?.();return}const r=t.getBoundingClientRect(),c=$("#cm");c.innerHTML=`<button data-act="upload">Upload song</button><button data-act="editprof">Edit profile</button>`;c.style.display="block";c.style.left=Math.min(r.left,innerWidth-c.offsetWidth-8)+"px";c.style.top=Math.min(r.bottom+4,innerHeight-c.offsetHeight-8)+"px"}
+ else if(act==="editprof"){if(!window.streamlineSignedIn){toast("Sign in to edit your artist profile");window.streamlineOpenAccount?.();return}const a=art("me");epP=a.p||null;epB=a.b||null;epI=[...(a.im||[])];dlg(`<h3>Edit profile</h3><p>Changes apply when you save.</p><div class="ebv" id="ebv" style="background:${a.b?`center/cover url(${a.b})`:`linear-gradient(${hue(a.name)}deg,${col(a.name)},#121212)`}"></div><label class="pill" style="display:inline-block;margin-bottom:16px">Change banner<input type="file" id="eb" accept="image/*" hidden></label><div class="pick" style="cursor:default"><span class="pfp" id="epv" style="width:72px;height:72px;font-size:28px;background:${a.p?`center/cover url(${a.p})`:col(a.name)}">${a.p?"":esc(a.name[0])}</span><label class="pill">Change photo<input type="file" id="ep" accept="image/*" hidden></label></div><input type="text" id="nn" maxlength="40" value="${esc(a.name)}" placeholder="Artist name" aria-label="Artist name"><textarea id="bio" maxlength="600" rows="4" placeholder="Write a short bio" aria-label="Bio">${esc(a.bio||"")}</textarea><div class="ths" id="eth">${thumbs()}</div><label class="pill" style="display:inline-block;margin-bottom:16px">Add slide images (up to 5)<input type="file" id="ei" accept="image/*" multiple hidden></label><div class="acts"><button class="pill" data-act="close">Cancel</button><button class="go" data-act="saveprof">Save</button></div>`)}
+ else if(act==="saveprof"){if(!window.streamlineSignedIn){toast("Sign in to edit your artist profile");return}const v=$("#nn").value.trim();if(!v){$("#nn").focus();return}const a=art("me");a.name=v;if(epP)a.p=epP;if(epB)a.b=epB;a.bio=$("#bio").value.trim();a.im=epI;close();side();main();pl();toast("Profile updated");window.streamlinePersistArtist?.()}
+ else if(act==="like"){if(liked.has(id))liked.delete(id);else liked.add(id);hearts();side();if(view.v==="liked")main()}
+ else if(act==="follow"){const a=art(id);if(following.has(id)){following.delete(id);a.f--}else{following.add(id);a.f++}t.textContent=following.has(id)?"Following":"Follow";refresh();side()}
+ else if(act==="bfol"){if(!mod)return;const a=art(id);dlg(`<h3>Boost followers</h3><p>${esc(a.name)}</p><div class="pre">${[100,1000,10000,100000].map(n=>`<button class="pill" data-act="amt" data-n="${n}">+${fmt(n)}</button>`).join("")}</div><input type="text" id="amt" value="100" inputmode="numeric"><div class="acts"><button class="pill" data-act="close">Cancel</button><button class="go" data-act="dofol" data-id="${id}">Boost</button></div>`)}
+ else if(act==="dofol"){if(!mod)return;const n=parseInt($("#amt").value.replace(/\D/g,""),10);if(!n){$("#amt").focus();return}const a=art(id);a.f+=n;close();refresh();toast("Boosted "+a.name+" by "+fmt(n)+" followers")}
+ else if(act==="liked"){$("#q").value="";q="";view={v:"liked"};side();main()}
+ else if(act==="pl"){$("#q").value="";q="";view={v:"pl",id};side();main()}
+ else if(act==="newpl"||act==="newpls"){if(act==="newpl")pendSong=null;dlg(`<h3>New playlist</h3><p>Give your playlist a name.</p><input type="text" id="pn" maxlength="40" placeholder="My playlist" aria-label="Playlist name"><div class="acts"><button class="pill" data-act="close">Cancel</button><button class="go" data-act="donewpl">Create</button></div>`);$("#pn").focus()}
+ else if(act==="donewpl"){const v=$("#pn").value.trim();if(!v){$("#pn").focus();return}const p={id:"p"+uid++,name:v,songs:pendSong?[pendSong]:[]};P.push(p);const from=pendSong;pendSong=null;close();if(from){side();toast("Added to “"+v+"”")}else{$("#q").value="";q="";view={v:"pl",id:p.id};side();main()}}
+ else if(act==="addpl"){pendSong=id;const s=find(id)[1];dlg(`<h3>Add to playlist</h3><p>${esc(s.t)}</p><div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">${P.map(p=>`<button class="pill" data-act="topl" data-id="${p.id}">${esc(p.name)}</button>`).join("")}<button class="pill" data-act="newpls">+ New playlist</button></div><div class="acts"><button class="pill" data-act="close">Cancel</button></div>`)}
+ else if(act==="topl"){const p=P.find(x=>x.id===id);close();if(p.songs.includes(pendSong))toast("Already in “"+p.name+"”");else{p.songs.push(pendSong);side();if(view.v==="pl")main();toast("Added to “"+p.name+"”")}pendSong=null}
+ else if(act==="rmpl"){const p=P.find(x=>x.id===view.id);p.songs=p.songs.filter(x=>x!==id);side();main();toast("Removed from playlist")}
+ else if(act==="delpl"){delId=id;const p=P.find(x=>x.id===id);dlg(`<h3>Delete playlist?</h3><p>“${esc(p.name)}” will be removed. The songs themselves stay where they are.</p><div class="acts"><button class="pill" data-act="close">Cancel</button><button class="go" data-act="dodelpl">Delete</button></div>`)}
+ else if(act==="dodelpl"){P=P.filter(x=>x.id!==delId);close();view={v:"home"};side();main();toast("Playlist deleted")}
+ else if(act==="slide"){const im=(art(view.id).im)||[],n=im.length;if(!n)return;sl=((sl+ +t.dataset.d)%n+n)%n;$("#slv").style.background=slBg(im[sl]);document.querySelectorAll("#sdt i").forEach((d,j)=>d.className=j===sl?"on":"")}
+ else if(act==="rmimg"){epI.splice(+t.dataset.j,1);$("#eth").innerHTML=thumbs()}
+ else if(act==="addaudio"){axId=id;$("#ax").click()}
+ else if(act==="pickpf")$("#pf").click();
+ else if(act==="pickbf")$("#bf").click();
+ else if(act==="rename"){dlg(`<h3>Change artist name</h3><p>This is the name shown on your page and next to your songs.</p><input type="text" id="nn" maxlength="40" value="${esc(art("me").name)}"><div class="acts"><button class="pill" data-act="close">Cancel</button><button class="go" data-act="doname">Save</button></div>`);$("#nn").select()}
+ else if(act==="doname"){if(!window.streamlineSignedIn){toast("Sign in to edit your artist profile");return}const v=$("#nn").value.trim();if(!v){$("#nn").focus();return}art("me").name=v;close();side();main();pl();toast("Name changed to “"+v+"”");window.streamlinePersistArtist?.()}
+ else if(act==="close")close();
+});
+document.addEventListener("input",e=>{if(e.target.id!=="q")return;q=e.target.value;if(q.trim())view={v:"search"};else if(view.v==="search")view={v:"home"};document.querySelectorAll(".side .nav").forEach(n=>n.classList.remove("on"));if(view.v==="home"){const h=document.querySelector('[data-act="home"]');if(h)h.classList.add("on")}main()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")close();if(e.key==="Enter"&&e.target.id==="pn")document.querySelector('[data-act="donewpl"]').click();if(e.key==="Enter"&&e.target.id==="nn")document.querySelector('[data-act="saveprof"],[data-act="doname"]').click()});
+// Restore saved browser data BEFORE the first render.
+try {
+ const saved = JSON.parse(localStorage.getItem("streamline_state_v1") || "null");
+ if (saved) {
+   (saved.a || []).forEach(x => { const a = A.find(y => y.id === x.id); if (a) Object.assign(a, x); });
+   liked = new Set(saved.liked || []);
+   following = new Set(saved.fol || []);
+   P = saved.P || [];
+   uid = Math.max(uid, saved.uid || 0);
+   heard = new Set(saved.heard || []);
+ }
+} catch (e) { console.warn("Could not restore saved site data", e); }
+side();main();pl();
+async function up(b){return null}
+const snap=()=>JSON.stringify({a:A.map(({id,name,l,f,v,bio,im,p,b,songs})=>({id,name,l,f,v,bio,im,p:p&&p.startsWith("blob:")?null:p,b,songs:songs.map(s=>({...s,u:s.u&&s.u.startsWith("blob:")?null:s.u}))})),liked:[...liked],fol:[...following],P,uid,heard:[...heard]});
+// Keep a local fallback, and expose a small bridge for Firebase sync.
+let lastLocalSnapshot = "";
+function saveLocalState() {
+ try {
+   const next = snap();
+   if (next !== lastLocalSnapshot) {
+     localStorage.setItem("streamline_state_v1", next);
+     lastLocalSnapshot = next;
+   }
+ } catch (e) { console.warn("Could not save site data in this browser", e); }
+}
+window.streamlineBridge = {
+ getState: () => JSON.parse(snap()),
+ applyState: d => {
+   if (!d || !Array.isArray(d.a)) return;
+   d.a.forEach(x => { const a=A.find(y=>y.id===x.id); if(a) Object.assign(a,x); });
+   liked=new Set(d.liked||[]); following=new Set(d.fol||[]); P=d.P||[];
+   uid=Math.max(uid,d.uid||0); heard=new Set(d.heard||[]);
+   side(); main(); pl(); saveLocalState();
+ },
+ redraw: () => { side(); main(); pl(); },
+ saveLocalState
+};
+saveLocalState();
+setInterval(saveLocalState,1000);
+window.addEventListener("pagehide",saveLocalState);
+window.addEventListener("beforeunload",saveLocalState);
+document.addEventListener("click",()=>setTimeout(saveLocalState,0));
+document.addEventListener("change",()=>setTimeout(saveLocalState,0));
+</script>
+<style>
+#owner-tools{position:fixed;right:18px;top:16px;z-index:50;display:flex;gap:8px;align-items:center}
+#owner-tools button{background:#1ed760;color:#000;border-radius:22px;padding:9px 15px;font-weight:800;box-shadow:0 3px 16px #0008}
+#owner-status{color:#b3b3b3;font-size:12px;background:#121212dd;border-radius:14px;padding:6px 10px}
+#owner-panel{position:fixed;inset:0;background:#000b;z-index:60;display:none;place-items:center;padding:20px}
+#owner-panel .owner-card{background:#242424;border-radius:12px;padding:24px;width:min(100%,390px);box-shadow:0 12px 50px #000a}
+#owner-panel h2{margin:0 0 8px;font-size:22px}
+#owner-panel p{color:#b3b3b3;margin:0 0 16px}
+#owner-panel input{display:block;width:100%;padding:12px;margin:10px 0 14px;background:#3e3e3e;border:0;border-radius:5px;color:white;font:inherit}
+#owner-panel .owner-actions{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+#owner-panel .owner-actions button{padding:9px 15px;border-radius:20px;background:#3e3e3e}
+#owner-panel .owner-actions .primary{background:#1ed760;color:#000;font-weight:800}
+@media(max-width:760px){#owner-tools{top:auto;bottom:86px;right:12px}#owner-status{display:none}}
+</style>
+<div id="owner-tools"><span id="owner-status">Browsing as guest</span><button id="owner-open">Sign in / Create account</button></div>
+<div id="owner-panel" role="dialog" aria-modal="true" aria-labelledby="owner-title"><div class="owner-card"><h2 id="owner-title">Streamline account</h2><p>Sign in to your artist account, or create a new account to get your own profile. Your profile is separate from everyone else’s.</p><form id="owner-form"><label for="owner-email">Email</label><input id="owner-email" type="email" autocomplete="username" required><label for="owner-password">Password</label><input id="owner-password" type="password" autocomplete="current-password" required><div id="owner-error" role="status" style="color:#ff9c9c;font-size:13px;min-height:18px;margin-bottom:10px"></div><div class="owner-actions"><button type="button" id="owner-cancel">Cancel</button><button class="primary" id="owner-submit" type="submit">Sign in</button></div></form><div class="owner-actions" style="margin-top:12px"><button type="button" id="owner-mode">Need an account? Create one</button><button type="button" id="owner-logout" style="display:none">Sign out</button></div></div></div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+const firebaseConfig = {
+ apiKey: "AIzaSyD-8DtrnVij8HKOKyb97KOdgV9s_arifI4",
+ authDomain: "vampify-e3cc5.firebaseapp.com",
+ projectId: "vampify-e3cc5",
+ storageBucket: "vampify-e3cc5.firebasestorage.app",
+ messagingSenderId: "356616271637",
+ appId: "1:356616271637:web:044061f9ac34522ffe9b1c",
+ measurementId: "G-73BCKGVWWR"
+};
+const OWNER_UID = "SAChTWFrhAW0U16X42h8hTaEdto2";
+const app=initializeApp(firebaseConfig), auth=getAuth(app), db=getFirestore(app);
+const $id=id=>document.getElementById(id), panel=$id("owner-panel"), openBtn=$id("owner-open"), status=$id("owner-status"), logoutBtn=$id("owner-logout"), errorBox=$id("owner-error"), modeBtn=$id("owner-mode"), submitBtn=$id("owner-submit");
+let owner=false, accountMode="signin", syncTimer=null, syncing=false, lastCloud="", lastArtist="", artistTimer=null, loadingProfiles=false;
+window.streamlineOwner=false; window.streamlineUserId=null; window.streamlineSignedIn=false;
+function panelOpen(){panel.style.display="grid";errorBox.textContent="";}
+function panelClose(){panel.style.display="none";}
+function setAccountMode(mode){accountMode=mode;const creating=mode==="create";$id("owner-title").textContent=creating?"Create your Streamline account":"Sign in to Streamline";submitBtn.textContent=creating?"Create account":"Sign in";modeBtn.textContent=creating?"Already have an account? Sign in":"Need an account? Create one";$id("owner-password").autocomplete=creating?"new-password":"current-password";errorBox.textContent="";}
+modeBtn.addEventListener("click",()=>setAccountMode(accountMode==="signin"?"create":"signin"));
+function updateModeratorUI(){
+ window.streamlineOwner=owner; window.streamlineSignedIn=!!auth.currentUser; window.streamlineUserId=auth.currentUser?.uid||null;
+ const toggle=$id("mod");if(toggle){toggle.disabled=!owner;toggle.checked=owner&&toggle.checked;}
+ status.textContent=owner?"Owner signed in":(auth.currentUser?"Artist signed in":"Browsing as guest");
+ openBtn.textContent=auth.currentUser?(owner?"Owner account":"My account"):"Sign in / Create account";
+ logoutBtn.style.display=auth.currentUser?"inline-block":"none";
+ modeBtn.style.display=auth.currentUser?"none":"inline-block";
+ if(!owner&&toggle)toggle.checked=false;
+}
+openBtn.addEventListener("click",()=>{if(auth.currentUser){panelOpen();$id("owner-email").value=auth.currentUser.email||"";setAccountMode("signin");$id("owner-password").value="";return;}setAccountMode("signin");panelOpen();});
+$id("owner-cancel").addEventListener("click",panelClose);
+panel.addEventListener("click",e=>{if(e.target===panel)panelClose();});
+$id("owner-form").addEventListener("submit",async e=>{
+ e.preventDefault();errorBox.textContent="";
+ try{const email=$id("owner-email").value.trim(),password=$id("owner-password").value;if(accountMode==="create"){if(password.length<6){errorBox.textContent="Use a password with at least 6 characters.";return;}await createUserWithEmailAndPassword(auth,email,password);}else{await signInWithEmailAndPassword(auth,email,password);}$id("owner-password").value="";panelClose();}
+ catch(err){const messages={"auth/email-already-in-use":"That email already has an account. Try signing in.","auth/invalid-email":"Enter a valid email address.","auth/weak-password":"Choose a stronger password (at least 6 characters).","auth/invalid-credential":"Email or password is incorrect.","auth/operation-not-allowed":"Email/password sign-in is not enabled in Firebase Authentication."};errorBox.textContent=messages[err.code]||err.message||"Authentication failed.";}
+});
+logoutBtn.addEventListener("click",async()=>{await signOut(auth);panelClose();});
+async function loadCloudState(){
+ try{
+  const refDoc=doc(db,"site","state"),result=await getDoc(refDoc);
+  if(result.exists()&&window.streamlineBridge){window.streamlineBridge.applyState(result.data());lastCloud=JSON.stringify(result.data());}
+ }catch(err){console.warn("Could not load Streamline cloud state",err);}
+}
+async function saveCloudState(){
+ if(!owner||auth.currentUser?.uid!==OWNER_UID||syncing||!window.streamlineBridge)return;
+ const data=window.streamlineBridge.getState();data.a=data.a.filter(a=>["nova","kid","mara","dex","me"].includes(a.id));const serialized=JSON.stringify(data);
+ if(serialized===lastCloud)return;
+ // Firestore documents have a 1 MiB limit; media belongs in Firebase Storage, not in the state document.
+ if(serialized.length>850000){status.textContent="Owner signed in · state too large";console.warn("Streamline state is too large for one Firestore document. Upload images/audio to Firebase Storage first.");return;}
+ syncing=true;
+ try{await setDoc(doc(db,"site","state"),data);lastCloud=serialized;status.textContent="Owner signed in · synced";}
+ catch(err){console.warn("Could not save Streamline cloud state",err);status.textContent="Owner signed in · sync error";}
+ finally{syncing=false;}
+}
+async function loadPublicArtists(){
+ if(loadingProfiles)return;loadingProfiles=true;
+ try{const snap=await getDocs(collection(db,"artists"));for(const item of snap.docs){const d=item.data(),id=item.id;if(!d||!d.name)continue;if(auth.currentUser?.uid===id)continue;const profile={...d,id,songs:Array.isArray(d.songs)?d.songs:[],l:Number(d.l)||0,f:Number(d.f)||0,im:Array.isArray(d.im)?d.im:[]};const existing=A.findIndex(a=>a.id===id);if(existing>=0)A[existing]=profile;else A.push(profile);}if(window.streamlineBridge)window.streamlineBridge.redraw();}
+ catch(err){console.warn("Could not load public artist profiles",err);}
+ finally{loadingProfiles=false;}
+}
+function safeProfileFromLocal(){const a=window.streamlineBridge?.getState()?.a?.find(x=>x.id==="me");return a||{id:"me",name:"Your Artist",bio:"",songs:[],l:0,f:0,im:[]};}
+async function loadOrCreateMyArtist(user){
+ const priorIndex=A.findIndex(a=>a.id===user.uid);if(priorIndex>=0)A.splice(priorIndex,1);const artistRef=doc(db,"artists",user.uid);let snap;
+ try{snap=await getDoc(artistRef);}catch(err){console.warn("Could not read your artist profile",err);status.textContent="Signed in · profile load failed";return;}
+ if(snap.exists()){
+  const d=snap.data(),a=window.streamlineBridge?.getState()?.a?.find(x=>x.id==="me");if(a){Object.assign(a,{name:d.name||"Your Artist",bio:d.bio||"",p:d.p||null,b:d.b||null,im:Array.isArray(d.im)?d.im:[],v:!!d.v,l:Number(d.l)||0,f:Number(d.f)||0,songs:Array.isArray(d.songs)?d.songs:[]});window.streamlineBridge.redraw();}
+ }else{
+  const a=owner?safeProfileFromLocal():null;const payload={ownerUid:user.uid,name:owner?(a.name||"Your Artist"):"Your Artist",bio:owner?(a.bio||"") :"",p:owner?(a.p||null):null,b:owner?(a.b||null):null,im:owner&&Array.isArray(a.im)?a.im:[],v:owner?!!a.v:false,l:owner?(Number(a.l)||0):0,f:owner?(Number(a.f)||0):0,songs:owner&&Array.isArray(a.songs)?a.songs:[],createdAt:Date.now()};
+  try{await setDoc(artistRef,payload);const local=window.streamlineBridge?.getState()?.a?.find(x=>x.id==="me");if(local)Object.assign(local,payload);}
+  catch(err){console.warn("Could not create your artist profile",err);status.textContent="Signed in · profile save failed";}
+ }
+ lastArtist="";await persistMyArtist();await loadPublicArtists();if(window.streamlineBridge)window.streamlineBridge.redraw();
+}
+async function persistMyArtist(){
+ const user=auth.currentUser;if(!user||!window.streamlineBridge)return;
+ const state=window.streamlineBridge.getState(),a=state.a.find(x=>x.id==="me");if(!a)return;
+ const data={ownerUid:user.uid,name:a.name||"Your Artist",bio:a.bio||"",p:a.p||null,b:a.b||null,im:Array.isArray(a.im)?a.im:[],v:owner?!!a.v:false,l:Number(a.l)||0,f:Number(a.f)||0,songs:Array.isArray(a.songs)?a.songs.map(song=>({...song,u:typeof song.u==="string"&&song.u.startsWith("blob:")?null:song.u})):[],updatedAt:Date.now()};
+ const serialized=JSON.stringify({...data,updatedAt:0});if(serialized===lastArtist)return;
+ if(serialized.length>780000){status.textContent="Artist profile too large to save";console.warn("Artist profile exceeds safe Firestore size. Large artwork/audio needs a separate free hosting solution.");return;}
+ try{await setDoc(doc(db,"artists",user.uid),data,{merge:true});lastArtist=serialized;status.textContent=owner?"Owner signed in · synced":"Artist signed in · profile saved";}
+ catch(err){console.warn("Could not save artist profile",err);status.textContent="Signed in · profile save error";}
+}
+window.streamlinePersistArtist=persistMyArtist;window.streamlineOpenAccount=panelOpen;
+onAuthStateChanged(auth,async user=>{
+ owner=!!user&&user.uid===OWNER_UID;updateModeratorUI();
+ if(syncTimer){clearInterval(syncTimer);syncTimer=null;}if(artistTimer){clearInterval(artistTimer);artistTimer=null;}
+ if(owner){await loadCloudState();await loadOrCreateMyArtist(user);await saveCloudState();syncTimer=setInterval(saveCloudState,2500);artistTimer=setInterval(persistMyArtist,2500);}
+ else if(user){await initialCloudLoad;await loadOrCreateMyArtist(user);artistTimer=setInterval(persistMyArtist,2500);}
+ else {await initialCloudLoad;const guest=window.streamlineBridge?.getState()?.a?.find(x=>x.id==="me");if(guest)Object.assign(guest,{name:"Your Artist",bio:"",p:null,b:null,im:[],v:false,l:0,f:0,songs:[]});await loadPublicArtists();if(window.streamlineBridge)window.streamlineBridge.redraw();}
+ updateModeratorUI();
+});
+// Public demo catalogue stays readable; real artist profiles are stored separately by Firebase UID.
+const initialCloudLoad=loadCloudState();
+</script></body></html>
